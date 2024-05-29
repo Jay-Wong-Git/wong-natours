@@ -7,6 +7,17 @@ let tours = JSON.parse(
   )
 );
 
+exports.checkId = (req, res, next, val) => {
+  const id = parseInt(req.params.id);
+  if (id < 0 || id >= tours.length)
+    return res.status(404).json({
+      status: 'fail',
+      requestedAt: req.requestTime,
+      msg: 'Invalid ID',
+    });
+  next();
+};
+
 exports.getAllTours = (req, res) => {
   return res.status(200).json({
     status: 'success',
@@ -19,13 +30,6 @@ exports.getAllTours = (req, res) => {
 exports.getTour = (req, res) => {
   console.log(req.requestTime);
   const id = parseInt(req.params.id);
-  if (id < 0 || id >= tours.length)
-    return res.status(404).json({
-      status: 'fail',
-      requestedAt: req.requestTime,
-      msg: 'Invalid ID',
-    });
-
   const tour = tours.find((el) => el.id === id);
   res.status(200).json({
     status: 'success',
@@ -40,7 +44,7 @@ exports.createTour = (req, res) => {
   const newTour = { id: newId, ...req.body };
   tours.push(newTour);
   fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
+    `${__dirname}/../dev-data/data/tours-simple.json`,
     JSON.stringify(tours),
     (err) => {
       if (err) {
@@ -63,13 +67,6 @@ exports.createTour = (req, res) => {
 
 exports.updateTour = (req, res) => {
   const id = parseInt(req.params.id);
-  if (id < 0 || id >= tours.length)
-    return res.status(404).json({
-      status: 'fail',
-      requestedAt: req.requestTime,
-      msg: 'Invalid ID',
-    });
-
   const tour = tours.find((el) => el.id === id);
   Object.assign(tour, req.body);
   fs.writeFile(
@@ -96,17 +93,9 @@ exports.updateTour = (req, res) => {
 
 exports.deleteTour = (req, res) => {
   const id = parseInt(req.params.id);
-  if (id < 0 || id >= tours.length)
-    return res.status(404).json({
-      status: 'fail',
-      requestedAt: req.requestTime,
-      msg: 'Invalid ID',
-    });
-
-  const tour = tours.find((el) => el.id === id);
   tours = tours.filter((el) => el.id !== id);
   fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
+    `${__dirname}/../dev-data/data/tours-simple.json`,
     JSON.stringify(tours),
     (err) => {
       if (err) {
