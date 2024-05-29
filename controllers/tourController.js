@@ -7,6 +7,8 @@ let tours = JSON.parse(
   )
 );
 
+// MIDDLEWARES
+
 exports.checkId = (req, res, next, val) => {
   const id = parseInt(req.params.id);
   if (id < 0 || id >= tours.length)
@@ -17,6 +19,20 @@ exports.checkId = (req, res, next, val) => {
     });
   next();
 };
+
+exports.checkBody = (req, res, next) => {
+  console.log('Check body');
+  const { name, price } = req.body;
+  if (!name || !price) {
+    return res.status(400).json({
+      status: 'fail',
+      msg: 'Missing name or price',
+    });
+  }
+  next();
+};
+
+// CONTROLLERS
 
 exports.getAllTours = (req, res) => {
   return res.status(200).json({
