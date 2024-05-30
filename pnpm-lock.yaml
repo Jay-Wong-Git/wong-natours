@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  dotenv:
+    specifier: ^16.4.5
+    version: registry.npmmirror.com/dotenv@16.4.5
   express:
     specifier: ^4.19.2
     version: registry.npmmirror.com/express@4.19.2
@@ -142,6 +145,13 @@ packages:
     name: destroy
     version: 1.2.0
     engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
+    dev: false
+
+  registry.npmmirror.com/dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dotenv/-/dotenv-16.4.5.tgz}
+    name: dotenv
+    version: 16.4.5
+    engines: {node: '>=12'}
     dev: false
 
   registry.npmmirror.com/ee-first@1.1.1:

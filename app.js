@@ -8,8 +8,11 @@ const app = express();
 
 // MIDDLEWARES
 
-app.use(morgan('dev')); // log
+if (process.env.NODE_ENV === 'development')
+  app.use(morgan('dev'));
+
 app.use(express.json()); // access request body
+
 app.use(express.static(`${__dirname}/public`)); // static files
 
 app.use((req, res, next) => {

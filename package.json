@@ -4,11 +4,13 @@
   "description": "Learning node, express, mongodb",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "start": "NODE_ENV=production nodemon server.js"
   },
   "author": "Jay Wong",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "morgan": "^1.10.0"
   }
