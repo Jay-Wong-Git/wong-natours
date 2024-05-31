@@ -1,6 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const mongoose = require('mongoose');
 
+const slugify = require('slugify');
+
 const tourSchema = new mongoose.Schema(
   {
     name: {
@@ -48,12 +50,32 @@ const tourSchema = new mongoose.Schema(
       select: false,
     },
     startDates: [Date],
+    slug: String,
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
 
+// virtual properties
 tourSchema.virtual('durationWeeks').get(function () {
   return Math.ceil(this.duration / 7);
 });
+
+// document middleware
+// runs before .save() or .create()
+tourSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+/*
+tourSchema.pre('save', (next) => {
+  console.log('Will save document...');
+  next();
+});
+// runs after .save or .create()
+tourSchema.post('save', (doc, next) => {
+  console.log('Document saved.');
+  next();
+});
+*/
 
 module.exports = mongoose.model('Tour', tourSchema);
