@@ -68,19 +68,14 @@ tourSchema.virtual('durationWeeks').get(function () {
 // runs before .save() or .create()
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
-  next();
-});
-/*
-tourSchema.pre('save', (next) => {
-  console.log('Will save document...');
+  this.start = Date.now();
   next();
 });
 // runs after .save or .create()
-tourSchema.post('save', (doc, next) => {
-  console.log('Document saved.');
+tourSchema.post('save', function (doc, next) {
+  console.log(`Creation took ${Date.now() - this.start} ms`);
   next();
 });
-*/
 
 // QUERY MIDDLEWARE
 tourSchema.pre(/^find/, function (next) {
@@ -90,6 +85,17 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 tourSchema.post(/^find/, function (docs, next) {
+  console.log(`Query took ${Date.now() - this.start} ms`);
+  next();
+});
+
+// AGGREGATION MIDDLEWARE
+tourSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  this.start = Date.now();
+  next();
+});
+tourSchema.post('aggregate', function (docs, next) {
   console.log(`Query took ${Date.now() - this.start} ms`);
   next();
 });
