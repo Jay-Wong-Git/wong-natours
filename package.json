@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "NODE_ENV=production nodemon server.js"
+    "start": "NODE_ENV=production nodemon server.js",
+    "debug": "ndb server.js"
   },
   "author": "Jay Wong",
   "license": "ISC",
