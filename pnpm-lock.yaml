@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  bcryptjs:
+    specifier: ^2.4.3
+    version: registry.npmmirror.com/bcryptjs@2.4.3
   dotenv:
     specifier: ^16.4.5
     version: registry.npmmirror.com/dotenv@16.4.5
@@ -437,6 +440,12 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       safe-buffer: registry.npmmirror.com/safe-buffer@5.1.2
+    dev: false
+
+  registry.npmmirror.com/bcryptjs@2.4.3:
+    resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/bcryptjs/-/bcryptjs-2.4.3.tgz}
+    name: bcryptjs
+    version: 2.4.3
     dev: false
 
   registry.npmmirror.com/bl@2.2.1:
