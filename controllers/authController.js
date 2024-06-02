@@ -48,7 +48,7 @@ exports.login = catchAsync(async (req, res, next) => {
   return res.status(200).json({ status: 'success', token });
 });
 
-exports.secure = catchAsync(async (req, res, next) => {
+exports.protect = catchAsync(async (req, res, next) => {
   let token;
   // 1) Getting token and check if it's there
   if (
@@ -88,3 +88,14 @@ exports.secure = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
+
+exports.restrictTo =
+  (...roles) =>
+  (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError('You do not have permission to perform this action', 403),
+      );
+    }
+    next();
+  };

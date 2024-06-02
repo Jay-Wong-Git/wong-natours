@@ -11,25 +11,25 @@ const {
   getMonthlyPlan,
 } = require('../controllers/tourController');
 
-const { secure } = require('../controllers/authController');
+const { protect, restrictTo } = require('../controllers/authController');
 
 const router = express.Router();
 
 // router.param('id', checkId);
 
 // API Alias
-router.route('/top-5-cheap').get(aliasTopTours, secure, getAllTours);
+router.route('/top-5-cheap').get(aliasTopTours, protect, getAllTours);
 
 // Aggregation Pipeline
-router.route('/tour-stats').get(secure, getTourStats);
-router.route('/month-plan/:year').get(secure, getMonthlyPlan);
+router.route('/tour-stats').get(protect, getTourStats);
+router.route('/month-plan/:year').get(protect, getMonthlyPlan);
 
 // API
-router.route('/').get(secure, getAllTours).post(secure, createTour);
+router.route('/').get(protect, getAllTours).post(protect, createTour);
 router
   .route('/:id')
-  .get(secure, getTour)
-  .patch(secure, updateTour)
-  .delete(secure, deleteTour);
+  .get(protect, getTour)
+  .patch(protect, updateTour)
+  .delete(protect, restrictTo('admin', 'lead-guide'), deleteTour);
 
 module.exports = router;
