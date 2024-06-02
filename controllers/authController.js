@@ -163,7 +163,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.passwordResetExpires = undefined;
   await user.save(); // User.findByIdAndUpdate will not work as intended!!!
 
-  // 3) Update changedPasswordAt for the user
+  // 3) Update changedPasswordAt for the user(Middleware to implement)
   // 4) Log the user in, and send JWT
   return createAndSendToken(user, 200, res);
 });
