@@ -10,6 +10,9 @@ dependencies:
   express:
     specifier: ^4.19.2
     version: registry.npmmirror.com/express@4.19.2
+  express-rate-limit:
+    specifier: ^7.3.0
+    version: registry.npmmirror.com/express-rate-limit@7.3.0(express@4.19.2)
   jsonwebtoken:
     specifier: ^9.0.2
     version: registry.npmmirror.com/jsonwebtoken@9.0.2
@@ -1352,6 +1355,18 @@ packages:
     name: etag
     version: 1.8.1
     engines: {node: '>= 0.6'}
+    dev: false
+
+  registry.npmmirror.com/express-rate-limit@7.3.0(express@4.19.2):
+    resolution: {integrity: sha512-ZPfWlcQQ1PsZonB/vqksOsBQV74z5osi/QcdoBCyKJXl/wOVjS1yRDmvkpMM52KJeLbiF2+djwVEnEgVCDdvtw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/express-rate-limit/-/express-rate-limit-7.3.0.tgz}
+    id: registry.npmmirror.com/express-rate-limit/7.3.0
+    name: express-rate-limit
+    version: 7.3.0
+    engines: {node: '>= 16'}
+    peerDependencies:
+      express: 4 || 5 || ^5.0.0-beta.1
+    dependencies:
+      express: registry.npmmirror.com/express@4.19.2
     dev: false
 
   registry.npmmirror.com/express@4.19.2:
