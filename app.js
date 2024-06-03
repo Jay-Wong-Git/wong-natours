@@ -2,6 +2,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -12,12 +13,15 @@ const app = express();
 
 // GLOBAL MIDDLEWARES
 
-// LOGGER
+// SET HTTP SECURITY HEADERS
+app.use(helmet());
+
+// DEVELOPMENT LOGGING
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// RATE LIMITER
+// LIMIT REQUESTS FROM THE SAME IP
 const limiter = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
@@ -25,10 +29,10 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// PARSE JSON
-app.use(express.json()); // access request body
+// BODY PARSER, READING DATE FROM body INTO req.body
+app.use(express.json({ limit: '10kb' })); // access request body
 
-// STATIC FILES
+// SERVING STATIC FILES
 app.use(express.static(`${__dirname}/public`)); // static files
 
 // DIY CONSOLE MESSAGE
@@ -53,7 +57,6 @@ app.all('*', (req, res, next) => {
     `Can't find '${req.originalUrl}' on the server`,
     404,
   );
-
   next(err);
 });
 
