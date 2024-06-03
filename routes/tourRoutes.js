@@ -10,8 +10,8 @@ const {
   getTourStats,
   getMonthlyPlan,
 } = require('../controllers/tourController');
-
 const { protect, restrictTo } = require('../controllers/authController');
+const { createReview } = require('../controllers/reviewController');
 
 const router = express.Router();
 
@@ -31,5 +31,10 @@ router
   .get(protect, getTour)
   .patch(protect, updateTour)
   .delete(protect, restrictTo('admin', 'lead-guide'), deleteTour);
+
+// Config nested routes
+router
+  .route('/:tourId/reviews')
+  .post(protect, restrictTo('user'), createReview);
 
 module.exports = router;
