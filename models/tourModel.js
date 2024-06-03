@@ -5,6 +5,8 @@ const slugify = require('slugify');
 
 // const validator = require('validator');
 
+// const User = require('./userModel');
+
 const tourSchema = new mongoose.Schema(
   {
     name: {
@@ -53,6 +55,37 @@ const tourSchema = new mongoose.Schema(
         message: 'Discount price ({VALUE}) should be below regular price',
       },
     },
+    startLocation: {
+      // GeoJSON
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
+    // guides: Array,
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
     summary: {
       type: String,
       trim: true,
@@ -76,6 +109,7 @@ const tourSchema = new mongoose.Schema(
     secretTour: {
       type: Boolean,
       default: false,
+      select: false,
     },
     slug: String,
   },
@@ -87,6 +121,13 @@ tourSchema.virtual('durationWeeks').get(function () {
   return Math.ceil(this.duration / 7);
 });
 
+// VIRTUAL POPULATE stage 1
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
+
 // DOCUMENT MIDDLEWARE
 // runs before .save() or .create()
 tourSchema.pre('save', function (next) {
@@ -94,6 +135,13 @@ tourSchema.pre('save', function (next) {
   this.start = Date.now();
   next();
 });
+
+// tourSchema.pre('save', async function (next) {
+//   const guidesPromise = this.guides.map(async (el) => await User.findById(el));
+//   this.guides = await Promise.all(guidesPromise);
+//   next();
+// });
+
 // runs after .save or .create()
 tourSchema.post('save', function (doc, next) {
   console.log(`Creation took ${Date.now() - this.start} ms`);
@@ -102,12 +150,25 @@ tourSchema.post('save', function (doc, next) {
 
 // QUERY MIDDLEWARE
 tourSchema.pre(/^find/, function (next) {
+  // hide some secret element data
   // tourSchema.pre('find', function (next) {
   this.find({ secretTour: { $ne: true } });
+  // calculate query time
   this.start = Date.now();
   next();
 });
+
+tourSchema.pre(/^find/, function (next) {
+  // populate reference object and get rid of some fields
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt',
+  });
+  next();
+});
+
 tourSchema.post(/^find/, function (docs, next) {
+  // log query time
   console.log(`Query took ${Date.now() - this.start} ms`);
   next();
 });
