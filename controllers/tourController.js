@@ -10,7 +10,7 @@ exports.aliasTopTours = async (req, res, next) => {
   next();
 };
 
-exports.getAllToursOld = catchAsync(async (req, res, next) => {
+exports.getAllToursDeprecated = catchAsync(async (req, res, next) => {
   /*
     // BUILD QUERY
     // 1.1) Filtering
