@@ -1,4 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
+const path = require('path');
 const mongoose = require('mongoose');
 
 const dotenv = require('dotenv');
@@ -10,7 +11,7 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-dotenv.config({ path: `${__dirname}/config.env` });
+dotenv.config({ path: path.join(__dirname, 'config.env') });
 const app = require('./app');
 
 const DB = process.env.MONGODB_URL.replace(
