@@ -1,15 +1,21 @@
 const catchAsync = require('../utils/catchAsync');
-const APIFeatures = require('../utils/apiFeatures');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const handlerFactory = require('./handlerFactory');
 
+// To filter out unwanted field names that are not allowed to be updated
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
   Object.keys(obj).forEach((el) => {
     if (allowedFields.includes(el)) newObj[el] = obj[el];
   });
   return newObj;
+};
+
+// Middleware to inject user id
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
@@ -41,6 +47,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   return res.status(204).json({ status: 'success', data: null });
 });
 
+// Undefined route
 exports.createUser = (req, res) =>
   res.status(500).json({
     status: 'fail',
