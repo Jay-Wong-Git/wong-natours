@@ -18,18 +18,23 @@ const router = express.Router();
 // router.param('id', checkId);
 
 // API Alias
-router.route('/top-5-cheap').get(aliasTopTours, protect, getAllTours);
+router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
 
 // Aggregation Pipeline
-router.route('/tour-stats').get(protect, getTourStats);
-router.route('/month-plan/:year').get(protect, getMonthlyPlan);
+router.route('/tour-stats').get(getTourStats);
+router
+  .route('/month-plan/:year')
+  .get(protect, restrictTo('admin', 'lead-guide', 'guide '), getMonthlyPlan);
 
 // API
-router.route('/').get(protect, getAllTours).post(protect, createTour);
+router
+  .route('/')
+  .get(getAllTours)
+  .post(protect, restrictTo('admin', 'lead-guide'), createTour);
 router
   .route('/:id')
-  .get(protect, getTour)
-  .patch(protect, updateTour)
+  .get(getTour)
+  .patch(protect, restrictTo('admin', 'lead-guide'), updateTour)
   .delete(protect, restrictTo('admin', 'lead-guide'), deleteTour);
 
 // Config nested routes

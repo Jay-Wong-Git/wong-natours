@@ -13,15 +13,18 @@ const { protect, restrictTo } = require('../controllers/authController');
 
 const router = express.Router({ mergeParams: true });
 
+// Need to be authenticated after this middleware
+router.use(protect);
+
 router
   .route('/')
-  .get(protect, getAllReviews)
-  .post(protect, restrictTo('user'), setTourUserIds, createReview);
+  .get(getAllReviews)
+  .post(restrictTo('user'), setTourUserIds, createReview);
 
 router
   .route('/:id')
-  .delete(protect, restrictTo('admin', 'user'), deleteReview)
-  .patch(protect, updateReview)
-  .get(protect, getReview);
+  .get(getReview)
+  .delete(restrictTo('admin', 'user'), deleteReview)
+  .patch(restrictTo('admin', 'user'), updateReview);
 
 module.exports = router;

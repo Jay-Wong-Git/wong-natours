@@ -8,6 +8,7 @@ const {
   updateMe,
   deleteMe,
   getMe,
+  createUser,
 } = require('../controllers/userController');
 
 const {
@@ -24,20 +25,21 @@ const router = express.Router();
 
 router.post('/signup', signup);
 router.post('/login', login);
-
 router.post('/forgotPassword', forgotPassword);
 router.patch('/resetPassword/:token', resetPassword);
-router.patch('/updateMyPassword', protect, updatePassword);
 
-router.get('/me', protect, getMe, getUser);
-router.patch('/updateMe', protect, updateMe);
-router.delete('/deleteMe', protect, deleteMe);
+// Need to be authenticated after this middleware
+router.use(protect);
 
-router.route('/').get(protect, restrictTo('admin'), getAllUsers);
-router
-  .route('/:id')
-  .get(protect, restrictTo('admin'), getUser)
-  .patch(protect, restrictTo('admin'), updateUser)
-  .delete(protect, restrictTo('admin'), deleteUser);
+router.patch('/updateMyPassword', updatePassword);
+router.get('/me', getMe, getUser);
+router.patch('/updateMe', updateMe);
+router.delete('/deleteMe', deleteMe);
+
+// Need to be authorized as "admin" after this middleware
+router.use(restrictTo('admin'));
+
+router.route('/').get(getAllUsers).post(createUser);
+router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
 
 module.exports = router;
