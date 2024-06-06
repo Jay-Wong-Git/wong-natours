@@ -1,8 +1,60 @@
+/* eslint-disable import/no-extraneous-dependencies */
+const multer = require('multer');
+const sharp = require('sharp');
+
 const Tour = require('../models/tourModel');
 const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const handlerFactory = require('./handlerFactory');
+
+// Upload tour images
+const multerStorage = multer.memoryStorage();
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image! Please only upload images!', 400));
+  }
+};
+const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
+exports.uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 },
+]);
+// upload.single('image')  req.file
+// upload.array('images', 5)  req.files
+// upload.fields([
+//   { name: 'images1', maxCount: 3 },
+//   { name: 'images2', maxCount: 4 },
+// ]);
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
+  if (!req.files.imageCover || !req.files.images) return next();
+
+  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+  // 1) Process cover image
+  await sharp(req.files.imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${req.body.imageCover}`);
+
+  // 2) Process images
+  req.body.images = [];
+  await Promise.all(
+    req.files.images.map(async (image, i) => {
+      const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+      req.body.images.push(filename);
+      await sharp(image.buffer)
+        .resize(2000, 1333)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/tours/${filename}`);
+    }),
+  );
+
+  return next();
+});
 
 exports.aliasTopTours = async (req, res, next) => {
   req.query.fields = 'price,summary,ratingsAverage,difficulty';
