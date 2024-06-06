@@ -6041,24 +6041,23 @@ var userDataForm = document.querySelector('.form-user-data');
 if (userDataForm) {
   userDataForm.addEventListener('submit', /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-      var email, name;
+      var form;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             e.preventDefault();
             document.querySelector('.btn--update-data').textContent = 'Updating...';
             document.querySelector('.btn--update-data').disabled = true;
-            email = document.getElementById('email').value;
-            name = document.getElementById('name').value;
-            _context.next = 7;
-            return (0, _updateSettings.updateSettings)('data', {
-              name: name,
-              email: email
-            });
-          case 7:
+            form = new FormData();
+            form.append('email', document.getElementById('email').value);
+            form.append('name', document.getElementById('name').value);
+            form.append('photo', document.getElementById('photo').files[0]);
+            _context.next = 9;
+            return (0, _updateSettings.updateSettings)('data', form);
+          case 9:
             document.querySelector('.btn--update-data').textContent = 'Save settings';
             document.querySelector('.btn--update-data').disabled = false;
-          case 9:
+          case 11:
           case "end":
             return _context.stop();
         }
@@ -6131,7 +6130,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57313" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62374" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

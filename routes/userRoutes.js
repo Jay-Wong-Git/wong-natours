@@ -9,6 +9,8 @@ const {
   deleteMe,
   getMe,
   createUser,
+  uploadUserPhoto,
+  resizeUserPhoto,
 } = require('../controllers/userController');
 
 const {
@@ -36,7 +38,7 @@ router.get('/logout', logout);
 
 router.patch('/updateMyPassword', updatePassword);
 router.get('/me', getMe, getUser);
-router.patch('/updateMe', updateMe);
+router.patch('/updateMe', uploadUserPhoto, resizeUserPhoto, updateMe);
 router.delete('/deleteMe', deleteMe);
 
 // Need to be authorized as "admin" after this middleware
