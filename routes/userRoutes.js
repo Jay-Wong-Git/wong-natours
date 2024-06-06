@@ -19,6 +19,7 @@ const {
   updatePassword,
   protect,
   restrictTo,
+  logout,
 } = require('../controllers/authController');
 
 const router = express.Router();
@@ -30,6 +31,8 @@ router.patch('/resetPassword/:token', resetPassword);
 
 // Need to be authenticated after this middleware
 router.use(protect);
+
+router.get('/logout', logout);
 
 router.patch('/updateMyPassword', updatePassword);
 router.get('/me', getMe, getUser);

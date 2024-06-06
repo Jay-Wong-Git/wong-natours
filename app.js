@@ -2,12 +2,15 @@
 const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 
+const { crossOriginEmbedderPolicy } = require('helmet');
+const { contentSecurityPolicy } = require('helmet');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
@@ -23,7 +26,9 @@ app.set('views', path.join(__dirname, 'views')); // Always use path.join to avoi
 // GLOBAL MIDDLEWARES
 
 // SET HTTP SECURITY HEADERS
-app.use(helmet());
+app.use(
+  helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }),
+);
 
 // DEVELOPMENT LOGGING
 if (process.env.NODE_ENV === 'development') {
@@ -39,7 +44,11 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // BODY PARSER, READING DATE FROM body INTO req.body
-app.use(express.json({ limit: '10kb' })); // access request body
+app.use(express.json({ limit: '10kb' })); // parse data from json
+app.use(express.urlencoded({ extended: true, limit: '10kb' })); // parse data from url encoded form
+
+// COOKIE PARSER
+app.use(cookieParser());
 
 // DATA SANITIZATION AGAINST NO-SQL QUERY INJECTION
 app.use(mongoSanitize()); // {"email": {"$gt": ""}, "password": "your-pass"}
