@@ -5846,7 +5846,7 @@ var login = exports.login = /*#__PURE__*/function () {
           _context.next = 3;
           return (0, _axios.default)({
             method: 'POST',
-            url: 'http://localhost:8888/api/v1/users/login',
+            url: 'http://127.0.0.1:8888/api/v1/users/login',
             data: {
               email: email,
               password: password
@@ -5884,7 +5884,7 @@ var logout = exports.logout = /*#__PURE__*/function () {
         case 0:
           _context2.prev = 0;
           _context2.next = 3;
-          return _axios.default.get('http://localhost:8888/api/v1/users/logout');
+          return _axios.default.get('http://127.0.0.1:8888/api/v1/users/logout');
         case 3:
           res = _context2.sent;
           if (res.data.status === 'success') {
@@ -5979,7 +5979,7 @@ var updateSettings = exports.updateSettings = /*#__PURE__*/function () {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
-          path = "http://localhost:8888/api/v1/users/".concat(type === 'data' ? 'updateMe' : 'updateMyPassword');
+          path = "http://127.0.0.1:8888/api/v1/users/".concat(type === 'data' ? 'updateMe' : 'updateMyPassword');
           _context.next = 4;
           return _axios.default.patch(path, data);
         case 4:
@@ -6130,7 +6130,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62374" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50416" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
