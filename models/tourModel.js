@@ -139,7 +139,7 @@ tourSchema.virtual('reviews', {
 // runs before .save() or .create()
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
-  this.start = Date.now();
+  // this.start = Date.now();
   next();
 });
 
@@ -150,10 +150,10 @@ tourSchema.pre('save', function (next) {
 // });
 
 // runs after .save or .create()
-tourSchema.post('save', function (doc, next) {
-  console.log(`Creation took ${Date.now() - this.start} ms`);
-  next();
-});
+// tourSchema.post('save', function (doc, next) {
+//   console.log(`Creation took ${Date.now() - this.start} ms`);
+//   next();
+// });
 
 // QUERY MIDDLEWARE
 tourSchema.pre(/^find/, function (next) {
@@ -161,7 +161,7 @@ tourSchema.pre(/^find/, function (next) {
   // tourSchema.pre('find', function (next) {
   this.find({ secretTour: { $ne: true } });
   // calculate query time
-  this.start = Date.now();
+  // this.start = Date.now();
   next();
 });
 
@@ -174,11 +174,11 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
-tourSchema.post(/^find/, function (docs, next) {
-  // log query time
-  console.log(`Query took ${Date.now() - this.start} ms`);
-  next();
-});
+// tourSchema.post(/^find/, function (docs, next) {
+//   // log query time
+//   console.log(`Query took ${Date.now() - this.start} ms`);
+//   next();
+// });
 
 // AGGREGATION MIDDLEWARE
 /*

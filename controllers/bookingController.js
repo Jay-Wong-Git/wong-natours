@@ -27,7 +27,9 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
           product_data: {
             name: `${tour.name} Tour`,
             description: tour.summary,
-            images: [`https://www.natours.dev/img/tours${tour.imageCover}`],
+            images: [
+              `https://wong-natours.vercel.app/img/tours/${tour.imageCover}`,
+            ],
           },
         },
         quantity: 1,
